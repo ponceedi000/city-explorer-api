@@ -21,72 +21,47 @@ app.get('/', (request, response) => {
 //-------------------
 
 
-// Forecast constructor <---Demo Url---> http://localhost:3000/weather?searchQuery=Seattle&lon=-122.33207&lat=47.60621
-class Forecast {
-  constructor(data) {
-    this.date = data.map(day => day.datetime);
-    this.description = data.map(day => day.weather.description);
 
-  }
-}
-
-//weather data will route here
+//Grabs data from weather Json
 app.get('/weather', (request, response) => {
-  
-  let newArray = [];
+
   let cityName = request.query.searchQuery;
-  weatherData.find(item => {
-    if (item.city_name === cityName) {
-      let date = item.data.map(day => day.datetime);
-      let description = item.data.map(day => day.weather.description);
-      newArray.push(new Forecast(item.data));
-    }
+  let lat = request.query.lat;
+  let lon = request.query.lon;
+  if (cityName) {
+    cityName = cityName.toLowerCase();
+  };
+// server will try to find match from client input, if found it will also find lat/lon data associated with city name
+  try {
+    const weatherInfo = weatherData.find((citySearched) =>
+      citySearched.city_name.toLowerCase() === cityName &&
+      citySearched.lat === lat &&
+      citySearched.lon === lon
+    );
+    response.send(createWeather(weatherInfo))
+// if try = false then send an error message
+  } catch (error) {
+    response.status(404).send('City Not found');
+
+  }
+  // grabs info required for constructor function below
+function createWeather(weatherInfo) {
+  const weatherReadings = weatherInfo.data.map((day) => {
+    const date = day.datetime;
+    const description = `Low of ${day.low_temp}, high of ${day.high_temp} with ${day.weather.description}`;
+    return new Forecast(date, description)
   });
-  if (newArray.length > 0){
-    response.send(newArray);
-  }
-  else{
-    response.status(500).send('Something Went Wrong');
-  }
+  return weatherReadings;
+}
 
 });
 
-
-
-// //constructor function for Forecast
-// app.get('/weather', (request, response) => {
-
-// let cityName = request.query.city_name;
-
-// let weatherInfo = weatherData.find((item) => {
-//   if(item.city_name === cityName) {
-//     return item;
-//   }
-// });
-
-// try {
-//   const newArray = weatherInfo.data.map((x) => {
-//     return new Forecast(x.valid_date, x.weather.description, weatherInfo.lat, weatherInfo.lon);
-//   });
-//   response.send(newArray);
-// } catch(error) {
-//   console.log(error);
-// }
-// class Forecast {
-//   constructor(dateOne, descriptionOne, latOne, lonOne) {
-//     this.date = dateOne;
-//     this.description = descriptionOne;
-//     this.lat = latOne;
-//     this.lon = lonOne
-//   }
-// }
-
-// //let newArray = weatherInfo.data.map(x => {
-// //return new Forecast(x.valid_date, x.weather.description, weatherInfo.lat, weatherInfo.lon);
-
-// // response.send(newArray);
-// });
-
+class Forecast {
+  constructor(date, description) {
+    this.date = date;
+    this.description = description
+  }
+}
 
 app.get('/*', (request, response) => {
   response.status(404).send('Not found');
@@ -94,5 +69,37 @@ app.get('/*', (request, response) => {
 
 
 app.listen(PORT, () => console.log(`Listening on PORT ${PORT}`));
+
+
+// <------FALLBACK CODE------>
+
+// // Forecast constructor <---Demo Url---> http://localhost:3000/weather?searchQuery=Seattle&lon=-122.33207&lat=47.60621
+// class Forecast {
+//   constructor(data) {
+//     this.date = data.map(day => day.datetime);
+//     this.description = data.map(day => day.weather.description);
+
+//   }
+// }
+
+// //weather data will route here
+// app.get('/weather', (request, response) => { 
+//   let newArray = [];
+//   let cityName = request.query.searchQuery;
+//   weatherData.find(item => {
+//     if (item.city_name === cityName) {
+//       let date = item.data.map(day => day.datetime);
+//       let description = item.data.map(day => day.weather.description);
+//       newArray.push(new Forecast(item.data));
+//     }
+//   });
+//   if (newArray.length > 0){
+//     response.send(newArray);
+//   }
+//   else{
+//     response.status(500).send('Something Went Wrong');
+//   }
+
+// });
 
 
