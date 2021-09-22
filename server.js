@@ -4,28 +4,42 @@ require('dotenv').config();
 // the library we use in node to set up our server
 const express = require('express');
 const cors = require('cors');
-//weather data from json file
-const weatherData = require('./data/weather.json');
 //port number from .env file
 const PORT = process.env.PORT || 3000;
 const app = express();
 // middleware
 app.use(cors());
+//weather data from json file
+const weatherData = require('./data/weather.json');
+
 
 
 app.get('/', (request, response) => {
-  response.status(200).send('I am home at last!');
+  response.status(200).send('HOME');
 });
 
-app.get('/weatherData', (request, response) => {
 
-let cityName = request.query.cityName;
+
+
+//constructor function for Forecast
+app.get('/weather', (request, response) => {
+
+let cityName = request.query.city_name;
 
 let weatherInfo = weatherData.find((item) => {
   if(item.city_name === cityName) {
     return item;
   }
 });
+
+try {
+  const newArray = weatherInfo.data.map((x) => {
+    return new Forecast(x.valid_date, x.weather.description, weatherInfo.lat, weatherInfo.lon);
+  });
+  response.send(newArray);
+} catch(error) {
+  console.log(error);
+}
 class Forecast {
   constructor(dateOne, descriptionOne, latOne, lonOne) {
     this.date = dateOne;
@@ -35,12 +49,10 @@ class Forecast {
   }
 }
 
-let newArr = weatherInfo.data.map(x => {
-  return new Forecast(x.valid_date, x.weather.description, weatherInfo.lat, weatherInfo.lon);
-});
+//let newArray = weatherInfo.data.map(x => {
+//return new Forecast(x.valid_date, x.weather.description, weatherInfo.lat, weatherInfo.lon);
 
-response.send(newArr);
-console.log(newArr)
+// response.send(newArray);
 });
 
 
