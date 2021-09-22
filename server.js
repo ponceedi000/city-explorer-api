@@ -1,17 +1,15 @@
 'use strict';
 
-
 require('dotenv').config();
 
 const express = require('express');
 const cors = require('cors');
-const foods = require('./data.json');
+const weatherData = require('./data/weather.json');
 
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3000;
 
 const app = express();
-
 // middleware
 app.use(cors());
 
@@ -20,15 +18,35 @@ app.get('/', (request, response) => {
   response.status(200).send('I am home at last!');
 });
 
-app.get('/foods', (request, response) => {
+app.get('/weatherData', (request, response) => {
 
-  const veg = request.query.veg === "true";
+let cityName = request.query.cityName;
 
-  const firstVeggy = foods.find(food => food.vegetarian === veg);
+let weatherInfo = weatherData.find((item) => {
+  if(item.city_name === cityName) {
+    return item;
+  }
+});
+class Forecast {
+  constructor(dateOne, descriptionOne, latOne, lonOne) {
+    this.date = dateOne;
+    this.description = descriptionOne;
+    this.lat = latOne;
+    this.lon = lonOne
+  }
+}
 
-  response.send(firstVeggy);
+let newArr = weatherInfo.data.map(x => {
+  return new Forecast(x.valid_date, x.weather.description, weatherInfo.lat, weatherInfo.lon);
+});
+response.send(newArr);
+console.log(newArr)
+});
 
+
+
+app.get('*', (request, response) => {
+  response.status(404).send('Not found');
 })
-
 
 app.listen(PORT, () => console.log(`Listening on PORT ${PORT}`));
