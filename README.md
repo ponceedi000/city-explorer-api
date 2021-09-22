@@ -8,7 +8,7 @@
 - I built a React application that uses the Axios library to make user-initiated requests for data from a thrid-party API.
 
 ## Getting Started
-<!-- What are the steps that a user must take in order to build this app on their own machine and get it running? -->
+![wireframe](img/../Lab%2007.png)
 
 ## Architecture
 
@@ -27,5 +27,5 @@
 
 - Estimate of time needed to complete: 8 hours
 - Start time: 2:48pm
-- Finish time: _____
-- Actual time needed to complete: _____
+- Finish time: 9:45
+- Actual time needed to complete: 9 hours
