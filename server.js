@@ -1,14 +1,19 @@
 'use strict';
-
-const express = require('express');
+// Imports
 require('dotenv').config();
+const express = require('express');
 const cors = require('cors');
-const app = express();
-app.use(cors());
 const axios = require('axios');
+const { handleGetWeather, handleGetMovies } = require('./routes');
 
+// Globals
 const PORT = process.env.PORT || 3001;
+const app = express();
 // const weatherData = require('./data/weather.json');
+
+// Middleware
+app.use(cors());
+
 
 class Forecast {
   constructor(date, description) {
@@ -17,32 +22,38 @@ class Forecast {
   }
 }
 
+
+// Routes
 app.get('/', (request, response) => {
-  response.status(200).send('goto: localhost:3001/weather');
+  response.status(200).send('HOME');
 });
 
-// WEATHER
-app.get('/weather', async (request, response) => {
-  let weatherArray = [];
-  let lat = request.query.lat;
-  let lon = request.query.lon;
-  const weatherResponse = weatherData.find(
-    citySearched =>
-      citySearched.city_name === request.query.searchQuery &&
-      citySearched.lat === lat &&
-      citySearched.lon === lon
-  );
+app.get('/weather', handleGetWeather);
 
-  if (weatherResponse) {
-    weatherArray = weatherResponse.data.map(
-      forecast =>
-        new Forecast(forecast.valid_date, forecast.weather.description)
-    );
-    response.status(200).send(weatherArray);
-  } else {
-    response.status(400).send('City not found');
-  }
-});
+app.get('/movies', handleGetMovies);
+
+// // Weather
+// app.get('/weather', async (request, response) => {
+//   let weatherArray = [];
+//   let lat = request.query.lat;
+//   let lon = request.query.lon;
+//   const weatherResponse = weatherData.find(
+//     citySearched =>
+//       citySearched.city_name === request.query.searchQuery &&
+//       citySearched.lat === lat &&
+//       citySearched.lon === lon
+//   );
+
+//   if (weatherResponse) {
+//     weatherArray = weatherResponse.data.map(
+//       forecast =>
+//         new Forecast(forecast.valid_date, forecast.weather.description)
+//     );
+//     response.status(200).send(weatherArray);
+//   } else {
+//     response.status(400).send('City not found');
+//   }
+// });
 
 // Errors
 app.get('*', errorHandler);
@@ -50,6 +61,7 @@ function errorHandler(request, response) {
   response.status(500).send('Something went wrong');
 }
 
+// Listener
 app.listen(PORT, () => console.log(`Listening on PORT ${PORT}`));
 
 
