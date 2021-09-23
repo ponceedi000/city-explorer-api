@@ -5,11 +5,10 @@ require('dotenv').config();
 const cors = require('cors');
 const app = express();
 app.use(cors());
-
-// const axios = require('axios');
+const axios = require('axios');
 
 const PORT = process.env.PORT || 3001;
-const weatherData = require('./data/weather.json');
+// const weatherData = require('./data/weather.json');
 
 class Forecast {
   constructor(date, description) {
@@ -23,7 +22,7 @@ app.get('/', (request, response) => {
 });
 
 // WEATHER
-app.get('/weather', (request, response) => {
+app.get('/weather', async (request, response) => {
   let weatherArray = [];
   let lat = request.query.lat;
   let lon = request.query.lon;
