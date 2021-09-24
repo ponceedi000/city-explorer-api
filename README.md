@@ -14,6 +14,7 @@
 ## Architecture
 
 - Express
+- Axios
 - Cors
 - .env
 - Nodeman
