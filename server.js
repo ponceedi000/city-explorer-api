@@ -3,8 +3,10 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-// const axios = require('axios');
-const { handleGetWeather, handleGetMovies } = require('./routes');
+//const axios = require('axios');
+const { handleGetMovies } = require('./modules/movies.js');
+const { handleGetWeather } = require('./modules/weather.js');
+
 
 // Globals
 const PORT = process.env.PORT || 3001;
@@ -30,13 +32,21 @@ app.get('/movies', handleGetMovies);
 
 
 // Errors
-app.get('*', errorHandler);
+app.get('/*', errorHandler);
 function errorHandler(request, response) {
-  response.status(500).send('Something went wrong');
+  response.status(404).send('Something went wrong');
 }
 
 // Listener
 app.listen(PORT, () => console.log(`Listening on PORT ${PORT}`));
+
+
+
+
+
+
+
+
 
 
 
