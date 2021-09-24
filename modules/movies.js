@@ -1,15 +1,30 @@
 'use strict';
 
-const axios = require('axios')
+const axios = require('axios');
+const { response } = require('express');
 
+class Movie {
+  constructor(data) {
+    this.data = data;
+  }
+}
 
 async function handleGetMovies(req, res) {
-  const { searchQuery } = req.query;
-  const url = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.MOVIE_API_KEY}&query=${searchQuery}&page=1`
-  const moviesResponse = await axios.get(url)
+  try {
+    const { searchQuery } = req.query;
+    let resultsArray = [];
+    let url = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.MOVIE_API_KEY}&query=${searchQuery}&page=1`
+    let moviesResponse = await axios.get(url);
 
-  res.send(moviesResponse.data.results);
-
+    moviesResponse.data.results.map(movie => {
+      resultsArray.push(new Movie(movie))
+    });
+    res.send(resultsArray);
+  } catch (error) {
+    console.log(error)
+    res.status(404).send('Something went wrong with requested movie data!');
+  }
+  
 }
 
 module.exports = { handleGetMovies };
