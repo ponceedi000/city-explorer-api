@@ -3,7 +3,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const axios = require('axios');
+// const axios = require('axios');
 const { handleGetWeather, handleGetMovies } = require('./routes');
 
 // Globals
@@ -15,12 +15,7 @@ const app = express();
 app.use(cors());
 
 
-class Forecast {
-  constructor(date, description) {
-    this.date = date;
-    this.description = description;
-  }
-}
+
 
 
 // Routes
@@ -32,28 +27,7 @@ app.get('/weather', handleGetWeather);
 
 app.get('/movies', handleGetMovies);
 
-// // Weather
-// app.get('/weather', async (request, response) => {
-//   let weatherArray = [];
-//   let lat = request.query.lat;
-//   let lon = request.query.lon;
-//   const weatherResponse = weatherData.find(
-//     citySearched =>
-//       citySearched.city_name === request.query.searchQuery &&
-//       citySearched.lat === lat &&
-//       citySearched.lon === lon
-//   );
 
-//   if (weatherResponse) {
-//     weatherArray = weatherResponse.data.map(
-//       forecast =>
-//         new Forecast(forecast.valid_date, forecast.weather.description)
-//     );
-//     response.status(200).send(weatherArray);
-//   } else {
-//     response.status(400).send('City not found');
-//   }
-// });
 
 // Errors
 app.get('*', errorHandler);
@@ -68,7 +42,7 @@ app.listen(PORT, () => console.log(`Listening on PORT ${PORT}`));
 
 
 
-// <------FALLBACK CODE----> <---Demo Url---> http://localhost:3000/weather?searchQuery=Seattle&lon=-122.33207&lat=47.60621
+// <------FALLBACK CODE----> <---Demo Url---> http://localhost:3000/weather?searchQuery=Seattle&lon=-122.3300624&lat=47.6038321
 
 // 'use strict';
 
