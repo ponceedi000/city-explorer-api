@@ -14,6 +14,7 @@
 ## Architecture
 
 - Express
+- Axios
 - Cors
 - .env
 - Nodeman
@@ -34,6 +35,6 @@
 ## Name of feature: Remote Server
 
 - Estimate of time needed to complete: 8 hours
-- Start time: 
-- Finish time: 
-- Actual time needed to complete: 
+- Start time: 1:30pm
+- Finish time: 11:10
+- Actual time needed to complete: 10 hours
