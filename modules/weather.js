@@ -1,6 +1,5 @@
 'use strict';
 
-let
 const axios = require('axios')
 
 class Forecast {
