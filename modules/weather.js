@@ -1,5 +1,7 @@
 'use strict';
 
+let cacheDB = {};
+
 const axios = require('axios')
 
 class Forecast {
@@ -10,12 +12,20 @@ class Forecast {
 }
 
 function handleGetWeather(request, response) {
-
+  // GETTING REFFERENCE ERROR: CANNOT ACCESS 'LAT' BEFORE INITIALIZATION
+  const key = 'weather-' + lat + lon;
   let lat = request.query.lat;
   let lon = request.query.lon;
   if (lat === undefined || lon === undefined) {
     response.status(500).send("Sorry, I could not process your request")
   }
+
+
+  // NOT WORKING YET
+  // if(cacheDB[key]) {
+  //   console.log(key + ' is a cache hit');
+  // }
+
   try {
     axios
       .get(
