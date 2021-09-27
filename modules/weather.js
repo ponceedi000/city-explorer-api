@@ -13,14 +13,14 @@ class Forecast {
 
 function handleGetWeather(request, response) {
   // GETTING REFFERENCE ERROR: CANNOT ACCESS 'LAT' BEFORE INITIALIZATION
-  const key = 'weather-' + lat + lon;
+  // const key = 'weather-' + lat + lon;
+  }
   let lat = request.query.lat;
   let lon = request.query.lon;
+
   if (lat === undefined || lon === undefined) {
     response.status(500).send("Sorry, I could not process your request")
   }
-
-
   // NOT WORKING YET
   // if(cacheDB[key]) {
   //   console.log(key + ' is a cache hit');
@@ -32,7 +32,7 @@ function handleGetWeather(request, response) {
         `https://api.weatherbit.io/v2.0/forecast/daily?key=${process.env.WEATHER_API_KEY}&lat=${lat}&lon=${lon}`
       )
       .then((weatherResponse) => {
-        let dailyForecast = getThreeDayForecast(weatherResponse.data);
+        let dailyForecast = getForecast(weatherResponse.data);
         console.log(dailyForecast)
         response.status(200).send(dailyForecast);
       });    
@@ -41,7 +41,7 @@ function handleGetWeather(request, response) {
   }
 }
 
-function getThreeDayForecast(cityData) {
+function getForecast(cityData) {
   let forecastArray = [];
   if (!cityData.status === 200) {
     return forecastArray;
