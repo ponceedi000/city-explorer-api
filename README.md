@@ -1,11 +1,14 @@
 # City Explorer Api
 
 **Author**: Ediberto Ponce
-**Version**: 1.0.0 (increment the patch/fix version number if you make more commits past your first submission)
+**Version**: 1.0.0 
 
 ## Overview
 
 - I built a React application that uses the Axios library to make user-initiated requests for data from a thrid-party API.
+
+## **Front-End Repo**: 
+- [https://github.com/ponceedi000/city-explorer](https://github.com/ponceedi000/city-explorer)
 
 ## Getting Started - Web Request-Response Cycle
 
